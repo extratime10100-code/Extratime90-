@@ -41,22 +41,58 @@
     </nav>
 
     <section class="hero-welcome">
-      <div class="hero-text-wrap">
+
+      <!-- النص — العمود الأيمن -->
+      <div class="hero-text-col">
         <div class="hero-eyebrow">مرحباً بك في عالم مختلف</div>
         <h2 class="hero-headline">
-          أهلاً بيك في عالم إكسترا تايم..<br /><span class="hero-gold"
-            >الوقت بتاعنا بيبدأ لما وقت غيرنا يخلص!</span
-          >
+          أهلاً بيك في عالم إكسترا تايم..<br />
+          <span class="hero-gold">الوقت بتاعنا بيبدأ لما وقت غيرنا يخلص!</span>
         </h2>
         <div class="hero-divider"></div>
         <p class="hero-sub">حيث تبدأ الأسطورة بعد الدقيقة ٩٠</p>
+        <button class="scroll-to-collection-btn" id="scrollToCollectionBtn">↓ انزل للكولكشن ↓</button>
       </div>
+
+      <!-- فاصل عمودي -->
+      <div class="hero-vline"></div>
+
+      <!-- العد التنازلي — العمود الأيسر -->
+      <div class="hero-cd-col" id="countdownSection">
+        <div class="countdown-eyebrow">COMING SOON</div>
+        <div class="countdown-date-label">٧ يوليو ٢٠٢٦</div>
+        <div class="countdown-grid" id="countdownGrid">
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cdDays">00</div>
+            <div class="countdown-label">يوم</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cdHours">00</div>
+            <div class="countdown-label">ساعة</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cdMins">00</div>
+            <div class="countdown-label">دقيقة</div>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-unit">
+            <div class="countdown-num" id="cdSecs">00</div>
+            <div class="countdown-label">ثانية</div>
+          </div>
+        </div>
+        <div class="countdown-bar-wrap">
+          <div class="countdown-bar" id="countdownBar"></div>
+        </div>
+        <p class="countdown-note">استعد… الوقت الإضافي بيبدأ قريباً 🕐</p>
+      </div>
+
       <div class="scroll-indicator">
         <div class="scroll-arrow"></div>
         <span>اسكرول لأسفل</span>
       </div>
-      <!-- زر انزل للكولكشن -->
-      <button class="scroll-to-collection-btn" id="scrollToCollectionBtn">↓ انزل للكولكشن ↓</button>
+
     </section>
 
     <section class="story-section s1" data-reveal>

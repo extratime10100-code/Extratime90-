@@ -374,7 +374,53 @@ function initScrollToCollection() {
   }
 }
 
-// ========== INITIALIZATION ==========
+// ========== COUNTDOWN TIMER ==========
+function initCountdown() {
+  const TARGET = new Date("2026-07-07T00:00:00");
+  // Progress bar: starts from site creation date (approx)
+  const START = new Date("2025-01-01T00:00:00");
+  const totalMs = TARGET - START;
+
+  function pad(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  function tick() {
+    const now = new Date();
+    const diff = TARGET - now;
+
+    if (diff <= 0) {
+      document.getElementById("cdDays").textContent = "00";
+      document.getElementById("cdHours").textContent = "00";
+      document.getElementById("cdMins").textContent = "00";
+      document.getElementById("cdSecs").textContent = "00";
+      document.getElementById("countdownBar").style.width = "100%";
+      const note = document.querySelector(".countdown-note");
+      if (note) note.textContent = "🎉 الوقت الإضافي بدأ! مرحباً بكم!";
+      return;
+    }
+
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins  = Math.floor((diff / (1000 * 60)) % 60);
+    const secs  = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("cdDays").textContent  = pad(days);
+    document.getElementById("cdHours").textContent = pad(hours);
+    document.getElementById("cdMins").textContent  = pad(mins);
+    document.getElementById("cdSecs").textContent  = pad(secs);
+
+    // Progress bar (elapsed %)
+    const elapsed = now - START;
+    const pct = Math.min(100, Math.max(0, (elapsed / totalMs) * 100));
+    document.getElementById("countdownBar").style.width = pct + "%";
+
+    setTimeout(tick, 1000);
+  }
+
+  tick();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   spawnParticles();
   initMorphTransition();
@@ -383,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavbarScroll();
   initCardAnimations();
   initScrollToCollection();
+  initCountdown();
 
   const modalClose = document.getElementById("modalClose");
   const modalOverlay = document.getElementById("modalOverlay");
