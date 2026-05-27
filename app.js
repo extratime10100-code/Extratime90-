@@ -228,10 +228,52 @@ function renderProducts() {
     const card = document.createElement("div");
     card.className = "watch-card";
     card.style.animationDelay = `${i * 0.05}s`;
-    card.innerHTML = `<div class="card-img-wrap"><img src="${w.img}" alt="${w.name}" loading="lazy"><div class="card-badge">${w.badge}</div></div><div class="card-body"><div class="card-name">${w.name}</div><div class="card-sub">${w.sub}</div><div class="card-footer"><div class="card-price">${w.price} <span>جنيه</span></div><button class="card-btn" data-name="${w.name}"> قريبا</button></div></div>`;
+
+    // زرّا الألوان يظهران فقط على ساعة Casio
+    const colorVariants = w.id === 9 ? `
+      <div class="color-variants">
+        <button class="color-dot silver-dot" data-img="casio1.jpg" data-card="${w.id}" title="Silver"></button>
+        <button class="color-dot blue-dot"   data-img="casio2.jpg" data-card="${w.id}" title="Blue"></button>
+        <button class="color-dot black-dot"  data-img="${w.img}"   data-card="${w.id}" title="Original"></button>
+      </div>` : "";
+
+    card.innerHTML = `
+      <div class="card-img-wrap">
+        <img src="${w.img}" alt="${w.name}" loading="lazy" id="casio-img-${w.id}">
+        <div class="card-badge">${w.badge}</div>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${w.name}</div>
+        <div class="card-sub">${w.sub}</div>
+        ${colorVariants}
+        <div class="card-footer">
+          <div class="card-price">${w.price} <span>جنيه</span></div>
+          <button class="card-btn" data-name="${w.name}"> قريبا</button>
+        </div>
+      </div>`;
     grid.appendChild(card);
   });
+
+  // تغيير الصورة عند الضغط على الدوائر الملونة
   grid.addEventListener("click", (e) => {
+    const dot = e.target.closest(".color-dot");
+    if (dot) {
+      const cardId = dot.dataset.card;
+      const newImg = dot.dataset.img;
+      const imgEl = document.getElementById(`casio-img-${cardId}`);
+      if (imgEl) {
+        imgEl.style.opacity = "0";
+        setTimeout(() => {
+          imgEl.src = newImg;
+          imgEl.style.opacity = "1";
+        }, 200);
+      }
+      // تمييز الزر المحدد
+      const siblings = dot.closest(".color-variants").querySelectorAll(".color-dot");
+      siblings.forEach(s => s.classList.remove("active-dot"));
+      dot.classList.add("active-dot");
+      return;
+    }
     const btn = e.target.closest(".card-btn");
     if (btn) openModal(btn.dataset.name);
   });
@@ -374,7 +416,53 @@ function initScrollToCollection() {
   }
 }
 
-// ========== INITIALIZATION ==========
+// ========== COUNTDOWN TIMER ==========
+function initCountdown() {
+  const TARGET = new Date("2026-07-07T00:00:00");
+  // Progress bar: starts from site creation date (approx)
+  const START = new Date("2025-01-01T00:00:00");
+  const totalMs = TARGET - START;
+
+  function pad(n) {
+    return String(n).padStart(2, "0");
+  }
+
+  function tick() {
+    const now = new Date();
+    const diff = TARGET - now;
+
+    if (diff <= 0) {
+      document.getElementById("cdDays").textContent = "00";
+      document.getElementById("cdHours").textContent = "00";
+      document.getElementById("cdMins").textContent = "00";
+      document.getElementById("cdSecs").textContent = "00";
+      document.getElementById("countdownBar").style.width = "100%";
+      const note = document.querySelector(".countdown-note");
+      if (note) note.textContent = "🎉 الوقت الإضافي بدأ! مرحباً بكم!";
+      return;
+    }
+
+    const days  = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+    const mins  = Math.floor((diff / (1000 * 60)) % 60);
+    const secs  = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("cdDays").textContent  = pad(days);
+    document.getElementById("cdHours").textContent = pad(hours);
+    document.getElementById("cdMins").textContent  = pad(mins);
+    document.getElementById("cdSecs").textContent  = pad(secs);
+
+    // Progress bar (elapsed %)
+    const elapsed = now - START;
+    const pct = Math.min(100, Math.max(0, (elapsed / totalMs) * 100));
+    document.getElementById("countdownBar").style.width = pct + "%";
+
+    setTimeout(tick, 1000);
+  }
+
+  tick();
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   spawnParticles();
   initMorphTransition();
@@ -383,6 +471,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavbarScroll();
   initCardAnimations();
   initScrollToCollection();
+  initCountdown();
 
   const modalClose = document.getElementById("modalClose");
   const modalOverlay = document.getElementById("modalOverlay");
